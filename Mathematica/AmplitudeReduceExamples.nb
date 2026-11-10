@@ -1,0 +1,97 @@
+Notebook[{Cell["Massive amplitude reduction", "Title"], 
+  Cell["1. Load package", "Section"], Cell["Evaluate the cells in order in a \
+fresh kernel. Keep the four package files and the catalog/data files beside \
+this notebook. Loading is separate from reduction. These examples use \
+supplied prepared replacements; new contraction patterns can take longer.", 
+   "Text"], Cell[BoxData[RowBox[{"Block", "[", 
+      RowBox[{RowBox[{"{", RowBox[{"MassiveTensorReduction`$LoadPreparedTable\
+", "=", "False"}], "}"}], ",", RowBox[{"Get", "[", 
+          RowBox[{"FileNameJoin", "[", RowBox[{"{", RowBox[{RowBox[
+                 {"NotebookDirectory", "[", "]"}], ",", 
+                "\"MassiveTensorReduction.m\""}], "}"}], "]"}], "]"}]}], 
+      "]"}]], "Input"], Cell["2. Input", "Section"], 
+  Cell["A1: four massive vectors with an open chain (degree 6). A2: fermions \
+on legs 1 and 4, massive vectors on legs 2 and 3, with a closed trace (degree \
+7). A3: four massive vectors and a scalar on leg 5 (degree 6). Every input \
+factor participates in the reduction. SpinorChain and TensorTrace use \
+starting chirality 1 for angle and 0 for square; subsequent brackets \
+alternate. All trace indices are contracted. The convention is s[i,j] = 2 \
+p_i.p_j.", "Text"], 
+  Cell[BoxData[RowBox[{RowBox[{"inputs", "=", 
+        RowBox[{"{", RowBox[{RowBox[{RowBox[{"ab", "[", RowBox[{"1", ",", 
+                  "2"}], "]"}], " ", RowBox[{"sb", "[", RowBox[{"2", ",", 
+                  "3"}], "]"}], " ", RowBox[{"sb", "[", RowBox[{"3", ",", 
+                  "4"}], "]"}], " ", RowBox[{"SpinorChain", "[", 
+                RowBox[{RowBox[{"{", RowBox[{"1", ",", "3", ",", "2", ",", 
+                      "4"}], "}"}], ",", "1"}], "]"}]}], ",", 
+            RowBox[{RowBox[{"ab", "[", RowBox[{"1", ",", "4"}], "]"}], " ", 
+              SuperscriptBox[RowBox[{"ab", "[", RowBox[{"2", ",", "3"}], 
+                 "]"}], "2"], " ", RowBox[{"TensorTrace", "[", 
+                RowBox[{RowBox[{"{", RowBox[{"1", ",", "2", ",", "3", ",", 
+                      "4"}], "}"}], ",", "0"}], "]"}]}], ",", 
+            RowBox[{RowBox[{"ab", "[", RowBox[{"1", ",", "2"}], "]"}], " ", 
+              RowBox[{"ab", "[", RowBox[{"3", ",", "4"}], "]"}], " ", 
+              RowBox[{"sb", "[", RowBox[{"1", ",", "3"}], "]"}], " ", 
+              RowBox[{"sb", "[", RowBox[{"2", ",", "4"}], "]"}], " ", 
+              RowBox[{"s", "[", RowBox[{"1", ",", "5"}], "]"}]}]}], "}"}]}], 
+      ";"}]], "Input"], 
+  Cell[BoxData[RowBox[{"Column", "[", RowBox[{"AmplitudeForm", "/@", 
+        "inputs"}], "]"}]], "Input"], Cell["3. Reduce", "Section"], 
+  Cell["The catalog is switched automatically for each example. \
+AutoSavePreparedData -> False preserves the supplied files. ReductionTrace -> \
+True records the successive applications, including the derivation behind a \
+prepared replacement.", "Text"], 
+  Cell[BoxData[RowBox[{RowBox[{"particleCounts", "=", 
+        RowBox[{"{", RowBox[{"4", ",", "4", ",", "5"}], "}"}]}], ";", 
+      RowBox[{"currentParticles", "=", "0"}], ";", 
+      RowBox[{"runs", "=", RowBox[{"Table", "[", 
+          RowBox[{RowBox[{RowBox[{"If", "[", RowBox[{RowBox[
+                   {"currentParticles", "=!=", RowBox[{"particleCounts", 
+                      "\[LeftDoubleBracket]", "i", 
+                      "\[RightDoubleBracket]"}]}], ",", RowBox[
+                   {RowBox[{"LoadRuleCatalog", "[", RowBox[{"FileNameJoin", 
+                        "[", RowBox[{"{", RowBox[{RowBox[
+                          {"NotebookDirectory", "[", "]"}], ",", RowBox[
+                          {"\"NativeRules_n\"", "<>", RowBox[{"ToString", 
+                          "[", RowBox[{"particleCounts", 
+                          "\[LeftDoubleBracket]", "i", 
+                          "\[RightDoubleBracket]"}], "]"}], "<>", 
+                          "\".json\""}]}], "}"}], "]"}], "]"}], ";", 
+                    RowBox[{"currentParticles", "=", RowBox[
+                       {"particleCounts", "\[LeftDoubleBracket]", "i", 
+                        "\[RightDoubleBracket]"}]}]}]}], "]"}], ";", 
+              RowBox[{"AmplitudeReduce", "[", RowBox[{RowBox[{"inputs", 
+                    "\[LeftDoubleBracket]", "i", "\[RightDoubleBracket]"}], 
+                  ",", RowBox[{"ReductionTrace", "\[Rule]", "True"}], ",", 
+                  RowBox[{"AutoSavePreparedData", "\[Rule]", "False"}]}], 
+                "]"}], ";", "$LastAmplitudeReduction"}], ",", 
+            RowBox[{"{", RowBox[{"i", ",", RowBox[{"Length", "[", "inputs", 
+                  "]"}]}], "}"}]}], "]"}]}], ";"}]], "Input"], 
+  Cell[BoxData[RowBox[{RowBox[{"results", "=", 
+        RowBox[{"Lookup", "[", RowBox[{"runs", ",", "\"Expression\""}], 
+          "]"}]}], ";", RowBox[{"If", "[", 
+        RowBox[{RowBox[{"AnyTrue", "[", RowBox[{"results", ",", "FailureQ"}], 
+            "]"}], ",", RowBox[{RowBox[{"Print", "[", "results", "]"}], ";", 
+            RowBox[{"Abort", "[", "]"}]}]}], "]"}], ";"}]], "Input"], 
+  Cell["4. Results", "Section"], 
+  Cell[BoxData[RowBox[{"Column", "[", RowBox[{"AmplitudeForm", "/@", 
+        "results"}], "]"}]], "Input"], Cell["Expected collected term counts: \
+15, 22, 31. Expected sequential derivation lengths: 14, 24, 37. All three \
+outputs have denominator one. These are finite-catalog reductions; the \
+examples alone do not establish uniqueness throughout each particle sector.", 
+   "Text"], Cell[BoxData[RowBox[{"Lookup", "[", 
+      RowBox[{"runs", ",", "\"Seconds\""}], "]"}]], "Input"], 
+  Cell["Times above exclude catalog loading and include tracing. They depend \
+on the local machine and use the supplied preparations.", "Text"], 
+  Cell["Inspect a reduction", "Subsection"], Cell["Choose exampleIndex = 1, 2 \
+or 3. Reload its catalog so the viewer uses the corresponding rule labels.", 
+   "Text"], Cell[BoxData[RowBox[{RowBox[{"exampleIndex", "=", "1"}], ";", 
+      RowBox[{"LoadRuleCatalog", "[", RowBox[{"FileNameJoin", "[", 
+          RowBox[{"{", RowBox[{RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+              RowBox[{"\"NativeRules_n\"", "<>", RowBox[{"ToString", "[", 
+                  RowBox[{"particleCounts", "\[LeftDoubleBracket]", 
+                    "exampleIndex", "\[RightDoubleBracket]"}], "]"}], "<>", 
+                "\".json\""}]}], "}"}], "]"}], "]"}], ";", 
+      RowBox[{"ReductionSteps", "[", RowBox[{"runs", "\[LeftDoubleBracket]", 
+          "exampleIndex", "\[RightDoubleBracket]"}], "]"}]}]], "Input"]}, 
+ WindowTitle -> "AmplitudeReduce examples", StyleDefinitions -> "Default.nb"]
